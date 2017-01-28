@@ -1,3 +1,6 @@
+/*
+ * Copyright 2016 codecentric AG
+ */
 
 package io
 

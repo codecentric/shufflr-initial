@@ -9,8 +9,18 @@ lazy val shufflr =
     .settings(settings)
     .settings(
       libraryDependencies ++= Seq(
-        library.scalaCheck % Test,
-        library.scalaTest  % Test
+        library.akkaHttp,
+        library.akkaHttpCirce,
+        library.akkaLog4j,
+        library.akkaPersistence,
+        library.akkaSse,
+        library.circeGeneric,
+        library.levelDb,
+        library.log4jCore,
+        library.scalactic,
+        library.akkaHttpTestkit % Test,
+        library.scalaCheck      % Test,
+        library.scalaTest       % Test
       )
     )
 
@@ -21,11 +31,30 @@ lazy val shufflr =
 lazy val library =
   new {
     object Version {
-      val scalaCheck = "1.13.4"
-      val scalaTest  = "3.0.1"
+      final val akka         = "2.4.16"
+      final val akkaHttp     = "10.0.3"
+      final val akkaHttpJson = "1.12.0"
+      final val akkaLog4j    = "1.3.0"
+      final val akkaSse      = "2.0.0"
+      final val circe        = "0.7.0"
+      final val levelDb      = "0.9"
+      final val log4j        = "2.8"
+      final val scala        = "2.12.1"
+      final val scalaCheck   = "1.13.4"
+      final val scalaTest    = "3.0.1"
     }
-    val scalaCheck = "org.scalacheck" %% "scalacheck" % Version.scalaCheck
-    val scalaTest  = "org.scalatest"  %% "scalatest"  % Version.scalaTest
+    val akkaHttp        = "com.typesafe.akka"        %% "akka-http"         % Version.akkaHttp
+    val akkaHttpCirce   = "de.heikoseeberger"        %% "akka-http-circe"   % Version.akkaHttpJson
+    val akkaHttpTestkit = "com.typesafe.akka"        %% "akka-http-testkit" % Version.akkaHttp
+    val akkaLog4j       = "de.heikoseeberger"        %% "akka-log4j"        % Version.akkaLog4j
+    val akkaPersistence = "com.typesafe.akka"        %% "akka-persistence"  % Version.akka
+    val akkaSse         = "de.heikoseeberger"        %% "akka-sse"          % Version.akkaSse
+    val circeGeneric    = "io.circe"                 %% "circe-generic"     % Version.circe
+    val levelDb         = "org.iq80.leveldb"         %  "leveldb"           % Version.levelDb
+    val log4jCore       = "org.apache.logging.log4j" %  "log4j-core"        % Version.log4j
+    val scalactic       = "org.scalactic"            %% "scalactic"         % Version.scalaTest // Scalactic and ScalaTest are inseparable!
+    val scalaCheck      = "org.scalacheck"           %% "scalacheck"        % Version.scalaCheck
+    val scalaTest       = "org.scalatest"            %% "scalatest"         % Version.scalaTest
   }
 
 // *****************************************************************************
@@ -70,8 +99,14 @@ lazy val gitSettings =
   )
 
 import de.heikoseeberger.sbtheader.HeaderPattern
-import de.heikoseeberger.sbtheader.license._
 lazy val headerSettings =
   Seq(
-    headers := Map("scala" -> Apache2_0("2017", "codecentric AG"))
+    headers := Map(
+      "scala" -> (HeaderPattern.cStyleBlockComment,
+                  """|/*
+                     | * Copyright 2016 codecentric AG
+                     | */
+                     |
+                     |""".stripMargin)
+    )
   )
